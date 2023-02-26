@@ -23,11 +23,23 @@ namespace Dedalord.LiveAr
         /// Scene to go to when returning to the starting scene
         /// </summary>
         public string RootScene;
+
+        /// <summary>
+        /// Unity Awake.
+        /// Subscribe to application control messages.
+        /// </summary>
+        public void Awake()
+        {
+            SimpleMessageRouter.Clear();
+            SimpleMessageRouter.AddListener(SimpleMessageId.GO_ROOT, OnGoBackToRoot);
+            SimpleMessageRouter.AddListener(SimpleMessageId.GO_LIVE_2D, OnLive2D);
+            SimpleMessageRouter.AddListener(SimpleMessageId.GO_AR_SAMPLES, OnARSamples);
+        }
         
         /// <summary>
         /// Invoke to discard everything and go to the Live2D test scene
         /// </summary>
-        public void OnLive2D()
+        private void OnLive2D()
         {
             SceneManager.LoadScene(Live2DTestScene);
         }
@@ -35,7 +47,7 @@ namespace Dedalord.LiveAr
         /// <summary>
         /// Invoke to discard everything and go to the AR samples scene
         /// </summary>
-        public void OnARSamples()
+        private void OnARSamples()
         {
             SceneManager.LoadScene(ARSamplesScene);
         }
@@ -43,7 +55,7 @@ namespace Dedalord.LiveAr
         /// <summary>
         /// Invoke to discard everything and go to the starting scene
         /// </summary>
-        public void OnGoBackToRoot()
+        private void OnGoBackToRoot()
         {
             SceneManager.LoadScene(RootScene);
         }
