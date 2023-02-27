@@ -47,3 +47,6 @@ MonoBehaviour:
   Live2DTestScene: live2dTest
   ARSamplesScene: Menu
   RootScene: main
+  FacePoseScene: FacePose
+  FaceMeshScene: FaceMesh
+  EyePoseScene: EyePoses
