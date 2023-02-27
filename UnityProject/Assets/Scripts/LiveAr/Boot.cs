@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR.ARFoundation;
 
 namespace Dedalord.LiveAr
 {
@@ -25,6 +26,21 @@ namespace Dedalord.LiveAr
         public string RootScene;
 
         /// <summary>
+        /// Scene to go to when testing Unity AR Foundation face position functionality.
+        /// </summary>
+        public string FacePoseScene;
+        
+        /// <summary>
+        /// Scene to go to when testing Unity AR Foundation face mesh functionality.
+        /// </summary>
+        public string FaceMeshScene;
+        
+        /// <summary>
+        /// Scene to go to when testing Unity AR Foundation eye tracking functionality.
+        /// </summary>
+        public string EyePoseScene;
+
+        /// <summary>
         /// Unity Awake.
         /// Subscribe to application control messages.
         /// </summary>
@@ -34,6 +50,19 @@ namespace Dedalord.LiveAr
             SimpleMessageRouter.AddListener(SimpleMessageId.GO_ROOT, OnGoBackToRoot);
             SimpleMessageRouter.AddListener(SimpleMessageId.GO_LIVE_2D, OnLive2D);
             SimpleMessageRouter.AddListener(SimpleMessageId.GO_AR_SAMPLES, OnARSamples);
+            
+            SimpleMessageRouter.AddListener(SimpleMessageId.GO_FACE_POSE, ()=> LoadARScene(FacePoseScene));
+            SimpleMessageRouter.AddListener(SimpleMessageId.GO_FACE_MESH, ()=> LoadARScene(FaceMeshScene));
+            SimpleMessageRouter.AddListener(SimpleMessageId.GO_EYE_POSE, ()=> LoadARScene(EyePoseScene));
+        }
+        
+        /// <summary>
+        /// Initializes the XR Loader before switching to the given scene.
+        /// </summary>
+        private void LoadARScene(string sceneName)
+        {
+            LoaderUtility.Initialize();
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
         
         /// <summary>
@@ -41,7 +70,7 @@ namespace Dedalord.LiveAr
         /// </summary>
         private void OnLive2D()
         {
-            SceneManager.LoadScene(Live2DTestScene);
+            LoadARScene(Live2DTestScene);
         }
         
         /// <summary>

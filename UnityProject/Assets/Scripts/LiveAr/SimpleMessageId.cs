@@ -7,6 +7,9 @@ namespace Dedalord.LiveAr
     {
         GO_ROOT,
         GO_LIVE_2D,
-        GO_AR_SAMPLES
+        GO_AR_SAMPLES,
+        GO_FACE_POSE,
+        GO_FACE_MESH,
+        GO_EYE_POSE
     }
 }
