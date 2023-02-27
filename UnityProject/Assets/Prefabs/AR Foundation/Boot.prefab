@@ -50,3 +50,4 @@ MonoBehaviour:
   FacePoseScene: FacePose
   FaceMeshScene: FaceMesh
   EyePoseScene: EyePoses
+  LipSyncScene: lipsync

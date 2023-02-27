@@ -39,6 +39,11 @@ namespace Dedalord.LiveAr
         /// Scene to go to when testing Unity AR Foundation eye tracking functionality.
         /// </summary>
         public string EyePoseScene;
+        
+        /// <summary>
+        /// Scene to go to when testing Unity AR Foundation functionality.
+        /// </summary>
+        public string LipSyncScene;
 
         /// <summary>
         /// Unity Awake.
@@ -54,6 +59,8 @@ namespace Dedalord.LiveAr
             SimpleMessageRouter.AddListener(SimpleMessageId.GO_FACE_POSE, ()=> LoadARScene(FacePoseScene));
             SimpleMessageRouter.AddListener(SimpleMessageId.GO_FACE_MESH, ()=> LoadARScene(FaceMeshScene));
             SimpleMessageRouter.AddListener(SimpleMessageId.GO_EYE_POSE, ()=> LoadARScene(EyePoseScene));
+            
+            SimpleMessageRouter.AddListener(SimpleMessageId.GO_LIP_SYNC, OnLipSync);
         }
         
         /// <summary>
@@ -87,6 +94,14 @@ namespace Dedalord.LiveAr
         private void OnGoBackToRoot()
         {
             SceneManager.LoadScene(RootScene);
+        }
+        
+        /// <summary>
+        /// Invoke to discard everything and go to the lipsync test scene
+        /// </summary>
+        private void OnLipSync()
+        {
+            SceneManager.LoadScene(LipSyncScene);
         }
     }
 }
