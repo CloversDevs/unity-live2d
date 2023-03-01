@@ -4,35 +4,76 @@ using UnityEngine;
 
 namespace Dedalord.LiveAr
 {
-    public class DummyFaceExpression
-    {
-        public readonly string RestingPose = ":)";
-        public readonly string TalkingPose = ":O";
-
-        public DummyFaceExpression(string restingPose, string talkingPose)
-        {
-            RestingPose = restingPose;
-            TalkingPose = talkingPose;
-        }
-    }
-
-    public enum Emotion
-    {
-        IDLE,
-        HAPPY,
-        SAD,
-        ANGRY,
-    }
+    /// <summary>
+    /// Animator controller for a TMP_Text text face.
+    /// </summary>
     public class LipSyncDummy : CharacterDisplayMono
     {
-        public TMP_Text Display;
-        private DummyFaceExpression _expression;
-        private string _mouthMovement = "";
-        private int _animFrame = 0;
+        /// <summary>
+        /// Definition for a dummy face, with the resting and talking face poses
+        /// </summary>
+        private struct DummyFaceExpression
+        {
+            /// <summary>
+            /// String to display when the mouth is closed.
+            /// </summary>
+            public readonly string RestingPose;
+            
+            /// <summary>
+            /// String to display when the mouth is opened.
+            /// </summary>
+            public readonly string TalkingPose;
 
+            /// <summary>
+            /// Constructor.
+            /// </summary>
+            /// <param name="restingPose">String to display when the mouth is closed.</param>
+            /// <param name="talkingPose">String to display when the mouth is opened.</param>
+            public DummyFaceExpression(string restingPose, string talkingPose)
+            {
+                RestingPose = restingPose;
+                TalkingPose = talkingPose;
+            }
+        }
+        
+        /// <summary>
+        /// Where to display face.
+        /// </summary>
+        public TMP_Text Display;
+        
+        /// <summary>
+        /// Where to display current viseme.
+        /// </summary>
+        public TMP_Text Viseme;
+        
+        /// <summary>
+        /// Expression to display.
+        /// </summary>
+        private DummyFaceExpression _expression;
+        
+        /// <summary>
+        /// Mouth viseme to display.
+        /// </summary>
+        private string _viseme = "";
+
+        /// <summary>
+        /// Current animation frame.
+        /// </summary>
+        private int _animFrame;
+
+        /// <summary>
+        /// How fast to change animation frames.
+        /// </summary>
         public float AnimDuration = 0.75f;
+        
+        /// <summary>
+        /// How long the current animation frame has been displayed.
+        /// </summary>
         private float _animTimer = 1f;
         
+        /// <summary>
+        /// Map of emotions to faces.
+        /// </summary>
         private readonly Dictionary<Emotion, DummyFaceExpression> Expressions = new()
         {
             { Emotion.IDLE, new(":)", ":O") },
@@ -41,22 +82,35 @@ namespace Dedalord.LiveAr
             { Emotion.ANGRY,  new(">:(", ">:O") },
         };
 
+        /// <summary>
+        /// Unity Awake.
+        /// </summary>
         private void Awake()
         {
             _expression = Expressions[Emotion.IDLE];
             _animTimer = AnimDuration;
         }
         
+        /// <summary>
+        /// Set emotion to display.
+        /// </summary>
         public override void SetEmotion(Emotion emotion)
         {
             _expression = Expressions[emotion];
         }
 
-        public override void SetMouthMovement(string movement)
+        /// <summary>
+        /// Set mouth viseme to display.
+        /// </summary>
+        public override void SetMouthViseme(string viseme)
         {
-            _mouthMovement = movement;
+            _viseme = viseme;
+            Viseme.text = viseme;
         }
 
+        /// <summary>
+        /// Unity LateUpdate.
+        /// </summary>
         private void LateUpdate()
         {
             _animTimer -= Time.deltaTime;
@@ -66,10 +120,11 @@ namespace Dedalord.LiveAr
             }
             _animTimer = AnimDuration;
             
-            if (_mouthMovement == "")
+            if (_viseme == "")
             {
                 Display.text = _expression.RestingPose;
                 _animFrame = 0;
+                Viseme.text = "";
                 return;
             }
 
