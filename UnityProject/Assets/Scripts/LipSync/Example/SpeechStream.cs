@@ -30,7 +30,7 @@ namespace Dedalord.LiveAr
         /// <summary>
         /// Invoked when the new mouth viseme is reached during playback.
         /// </summary>
-        public event Action<string> OnReachViseme;
+        public event Action<Viseme> OnReachViseme;
         
         /// <summary>
         /// String provided to make the speech.
@@ -50,7 +50,7 @@ namespace Dedalord.LiveAr
         /// <summary>
         /// Playback speed.
         /// </summary>
-        public float Speed = 10f;
+        public float Speed;
         
         /// <summary>
         /// Character index on the text that is currently being said in the speech.
@@ -73,9 +73,10 @@ namespace Dedalord.LiveAr
         private int _currentVisemeIndex;
         
         
-        public SpeechStream(string sentence, TextToVisemes visemeProvider)
+        public SpeechStream(string sentence, float speed, TextToVisemes visemeProvider)
         {
             _sentence = sentence;
+            Speed = speed;
             _visemes = visemeProvider.GetSentencePhonemes(_sentence);
         }
 
@@ -133,7 +134,7 @@ namespace Dedalord.LiveAr
             {
                 if (_visemes[i].Index < _currentCharacterIndex)
                 {
-                    OnReachViseme?.Invoke(_visemes[i].Phoneme);
+                    OnReachViseme?.Invoke(TextToVisemes._phonemeToViseme[_visemes[i].Phoneme]);
                 }
             }
             

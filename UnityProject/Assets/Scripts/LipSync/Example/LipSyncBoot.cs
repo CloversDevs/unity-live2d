@@ -50,8 +50,8 @@ namespace Dedalord.LiveAr
             SpeechController.OnStopTalking += () => Debug.LogError($"END");
             //SpeechController.OnAddText += s => Debug.LogError($"TEXT: {s}");
             
-            SpeechController.OnReachViseme += s => Display.SetMouthViseme(s);
-            SpeechController.OnStopTalking += () => Display.SetMouthViseme("");
+            SpeechController.OnReachViseme += v => Display.SetMouthViseme(v);
+            SpeechController.OnStopTalking += () => Display.SetMouthViseme(Viseme.Silence);
             SpeechController.OnAddText += s => TextDisplay.text = s;
             
             SpeechController.WhenReady(()=>
@@ -73,12 +73,12 @@ namespace Dedalord.LiveAr
     public interface ICharacterDisplay
     {
         public void SetEmotion(Emotion emotion);
-        public void SetMouthViseme(string viseme);
+        public void SetMouthViseme(Viseme viseme);
     }
 
     public abstract class CharacterDisplayMono : MonoBehaviour, ICharacterDisplay
     {
         public abstract void SetEmotion(Emotion emotion);
-        public abstract void SetMouthViseme(string viseme);
+        public abstract void SetMouthViseme(Viseme viseme);
     }
 }

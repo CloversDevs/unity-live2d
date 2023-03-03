@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Dedalord.LiveAr
 {
@@ -21,7 +23,7 @@ namespace Dedalord.LiveAr
         /// <summary>
         /// Current viseme displayed.
         /// </summary>
-        private string _viseme = "";
+        private Viseme _viseme = Viseme.Silence;
         
         /// <summary>
         /// Current animation frame displayed.
@@ -50,6 +52,7 @@ namespace Dedalord.LiveAr
         {
             _emotion = Emotion.IDLE;
             _animTimer = AnimDuration;
+            SetViseme(Viseme.Silence);
             SetAnimationFrame(0);
         }
         
@@ -64,10 +67,21 @@ namespace Dedalord.LiveAr
         /// <summary>
         /// Set the mouth posture.
         /// </summary>
-        public override void SetMouthViseme(string viseme)
+        public override void SetMouthViseme(Viseme viseme)
         {
-            _isTalking = viseme != "";
+            _isTalking = viseme != Viseme.Silence;
+            SetViseme(viseme);
+        }
+
+        private void SetViseme(Viseme viseme)
+        {
             _viseme = viseme;
+            var visemes = Enum.GetValues(typeof(Viseme));
+            foreach (int value in visemes)
+            {
+                var id = $"{value}_{(Viseme)value}";
+                AnimatorController.SetBool(id, (int)_viseme == value);
+            }
         }
 
         /// <summary>
@@ -84,11 +98,10 @@ namespace Dedalord.LiveAr
             
             if (!_isTalking)
             {
-                SetAnimationFrame(0);
+                SetViseme(Viseme.Silence);
                 return;
             }
 
-            SetAnimationFrame((_animFrame + Random.Range(1, 3)) % 3);
         }
 
         /// <summary>

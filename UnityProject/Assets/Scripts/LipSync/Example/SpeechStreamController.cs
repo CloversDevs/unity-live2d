@@ -10,6 +10,11 @@ namespace Dedalord.LiveAr
     public class SpeechStreamController : MonoBehaviour
     {
         /// <summary>
+        /// Playback speed.
+        /// </summary>
+        public float Speed = 20f;
+        
+        /// <summary>
         /// Invoked when a speech starts playing.
         /// </summary>
         public event Action OnStartTalking;
@@ -28,7 +33,7 @@ namespace Dedalord.LiveAr
         /// <summary>
         /// Invoked when a new mouth viseme is reached in the playing speech.
         /// </summary>
-        public event Action<string> OnReachViseme;
+        public event Action<Viseme> OnReachViseme;
         
         /// <summary>
         /// Invoked when the speech controller is ready to start.
@@ -94,8 +99,8 @@ namespace Dedalord.LiveAr
         /// </summary>
         private void CreateStream(string sentence)
         {
-            _currentSpeech = new SpeechStream(sentence, _vicemes);
-            _currentSpeech.OnReachViseme += s => OnReachViseme?.Invoke(s);
+            _currentSpeech = new SpeechStream(sentence, Speed, _vicemes);
+            _currentSpeech.OnReachViseme += v => OnReachViseme?.Invoke(v);
             _currentSpeech.OnStartTalking += () => OnStartTalking?.Invoke();
             _currentSpeech.OnStopTalking += () => OnStopTalking?.Invoke();
             _currentSpeech.OnAddText += s => OnAddText?.Invoke(s);

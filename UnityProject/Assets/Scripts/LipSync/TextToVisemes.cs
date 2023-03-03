@@ -9,15 +9,77 @@ using UnityEngine;
 
 namespace Dedalord.LiveAr
 {
+    public enum Viseme
+    {
+        Silence = 0,
+        A = 1,
+        E = 2,
+        I = 3,
+        O = 4,
+        U = 5,
+        F_T_Th_V = 6,
+        J_Ch_Sh = 7,
+        B_M_P = 8,
+        C_D_G_K_N_S_X_Z = 9,
+        Q_W = 10,
+        R_L = 11,
+    }
+    
     /// <summary>
     /// Converter that creates visemes from the provided text.
     /// </summary>
     public class TextToVisemes
     {
         /// <summary>
-        /// Path to the viceme dictionary.
+        /// Map from names of phonemes to the Viseme animation ids.
         /// </summary>
-        public readonly string DICTIONARY_PATH = "cmudict/cmudict-0.7b";
+        public static readonly Dictionary<string, Viseme> _phonemeToViseme = new()
+        { 
+            { "AH", Viseme.A }, 
+            { "EY", Viseme.E }, 
+            { "Z", Viseme.C_D_G_K_N_S_X_Z }, 
+            { "D", Viseme.C_D_G_K_N_S_X_Z }, 
+            { "IY", Viseme.I }, 
+            { "EH", Viseme.E }, 
+            { "M", Viseme.B_M_P }, 
+            { "F", Viseme.F_T_Th_V }, 
+            { "AO", Viseme.A }, 
+            { "R", Viseme.C_D_G_K_N_S_X_Z }, 
+            { "T", Viseme.F_T_Th_V }, 
+            { "UW", Viseme.U }, 
+            { "W", Viseme.C_D_G_K_N_S_X_Z }, 
+            { "N", Viseme.C_D_G_K_N_S_X_Z }, 
+            { "IH", Viseme.I }, 
+            { "P", Viseme.B_M_P }, 
+            { "L", Viseme.C_D_G_K_N_S_X_Z }, 
+            { "AY", Viseme.A }, 
+            { "AA", Viseme.A }, 
+            { "B", Viseme.B_M_P }, 
+            { "ER", Viseme.E }, 
+            { "G", Viseme.C_D_G_K_N_S_X_Z }, 
+            { "K", Viseme.C_D_G_K_N_S_X_Z }, 
+            { "S", Viseme.C_D_G_K_N_S_X_Z }, 
+            { "TH", Viseme.F_T_Th_V }, 
+            { "V", Viseme.F_T_Th_V }, 
+            { "HH", Viseme.J_Ch_Sh }, 
+            { "AE", Viseme.A }, 
+            { "OW",Viseme.O }, 
+            { "NG", Viseme.C_D_G_K_N_S_X_Z }, 
+            { "SH", Viseme.J_Ch_Sh }, 
+            { "ZH", Viseme.J_Ch_Sh }, 
+            { "Y", Viseme.E }, 
+            { "AW", Viseme.A }, 
+            { "JH", Viseme.J_Ch_Sh }, 
+            { "CH", Viseme.J_Ch_Sh }, 
+            { "UH", Viseme.U }, 
+            { "DH", Viseme.C_D_G_K_N_S_X_Z }, 
+            { "OY", Viseme.O }
+        };
+        
+        /// <summary>
+        /// Path to the simplified phoneme dictionary.
+        /// </summary>
+        public readonly string DICTIONARY_SIMPLIFIED_PATH = "cmudict/cmudict-short.7b";
         
         /// <summary>
         /// Vicemes loaded in memory.
@@ -46,82 +108,27 @@ namespace Dedalord.LiveAr
             return result;
         }
 
+        
         /// <summary>
         /// Load phonetic dictionary from disk.
         /// </summary>
         public async Task Load()
         {
-            var filePath = Path.Combine(Application.streamingAssetsPath, DICTIONARY_PATH);
+            var filePath = Path.Combine(Application.streamingAssetsPath, DICTIONARY_SIMPLIFIED_PATH);
 
             var startTime = Time.realtimeSinceStartup;
             var lines = await File.ReadAllLinesAsync(filePath);
 
-            var allPhonemes = new List<string>();
             var count = 0;
-            foreach (string line in lines)
+            foreach (var line in lines)
             {
-                // Discard empty lines
-                if (line.Length == 0)
-                {
-                    continue;
-                }
-
-                var firstLetter = line[0];
-                var startsWithLetter = char.IsLetter(firstLetter) && firstLetter is >= 'A' and <= 'Z';
-                // Discard lines that don't start with a word
-                if (!startsWithLetter)
-                {
-                    continue;
-                }
-
                 var contents = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                // Discard lines that don't contain a word and a pronunciation
-                if (contents.Length < 2)
-                {
-                    continue;
-                }
-
-                for (var i = 0; i < contents.Length; i++)
-                {
-                    contents[i] = contents[i].Replace(" ", "");
-                    contents[i] = Regex.Replace(contents[i], @"[\d\s]+", "");
-                }
-
                 var values = new List<string>(new ArraySegment<string>(contents, 1, contents.Length - 1));
-                
-                foreach (var phoneme in values)
-                {
-                    if (allPhonemes.Contains(phoneme))
-                    {
-                        continue;
-                    }
-                    allPhonemes.Add(phoneme);
-                }
-                
+
                 _dictionary.Add(contents[0], values);
                 count++;
             }
-
-            var phonemesLog = $"All Phonemes ({allPhonemes.Count}):";
-            var reducedPhonemes = new List<string>();
-            foreach (var phoneme in allPhonemes)
-            {
-                phonemesLog += $" {phoneme}";
-                var simplifiedPhoneme = Regex.Replace(phoneme, @"\d+", "");
-                if (reducedPhonemes.Contains(simplifiedPhoneme))
-                {
-                    continue;
-                }
-                reducedPhonemes.Add(simplifiedPhoneme);
-            }
-            Debug.LogError(phonemesLog);
             
-            phonemesLog = $"Reduced Phonemes ({reducedPhonemes.Count}):";
-            foreach (var phoneme in reducedPhonemes)
-            {
-                phonemesLog += $" {phoneme}";
-            }
-            Debug.LogError(phonemesLog);
             Debug.LogError($"Lines read:{count} Time to parse:{Time.realtimeSinceStartup - startTime}");
         }
         

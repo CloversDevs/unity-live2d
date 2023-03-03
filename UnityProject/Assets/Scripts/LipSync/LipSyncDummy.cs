@@ -44,7 +44,7 @@ namespace Dedalord.LiveAr
         /// <summary>
         /// Where to display current viseme.
         /// </summary>
-        public TMP_Text Viseme;
+        public TMP_Text VisemeDisplay;
         
         /// <summary>
         /// Expression to display.
@@ -54,7 +54,7 @@ namespace Dedalord.LiveAr
         /// <summary>
         /// Mouth viseme to display.
         /// </summary>
-        private string _viseme = "";
+        private Viseme _viseme = Viseme.Silence;
 
         /// <summary>
         /// Current animation frame.
@@ -102,10 +102,10 @@ namespace Dedalord.LiveAr
         /// <summary>
         /// Set mouth viseme to display.
         /// </summary>
-        public override void SetMouthViseme(string viseme)
+        public override void SetMouthViseme(Viseme viseme)
         {
             _viseme = viseme;
-            Viseme.text = viseme;
+            VisemeDisplay.text = viseme.ToString();
         }
 
         /// <summary>
@@ -120,11 +120,11 @@ namespace Dedalord.LiveAr
             }
             _animTimer = AnimDuration;
             
-            if (_viseme == "")
+            if (_viseme == Viseme.Silence)
             {
                 Display.text = _expression.RestingPose;
                 _animFrame = 0;
-                Viseme.text = "";
+                VisemeDisplay.text = "";
                 return;
             }
 
