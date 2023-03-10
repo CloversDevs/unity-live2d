@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Dedalord.LiveAr
 {
@@ -28,64 +29,18 @@ namespace Dedalord.LiveAr
     /// <summary>
     /// Converter that creates visemes from the provided text.
     /// </summary>
-    public class TextToVisemes
-    {
-        /// <summary>
-        /// Map from names of phonemes to the Viseme animation ids.
-        /// </summary>
-        public static readonly Dictionary<string, Viseme> _phonemeToViseme = new()
-        { 
-            { "AH", Viseme.A }, 
-            { "EY", Viseme.E }, 
-            { "Z", Viseme.C_D_G_K_N_S_X_Z }, 
-            { "D", Viseme.C_D_G_K_N_S_X_Z }, 
-            { "IY", Viseme.I }, 
-            { "EH", Viseme.E }, 
-            { "M", Viseme.B_M_P }, 
-            { "F", Viseme.F_T_Th_V }, 
-            { "AO", Viseme.A }, 
-            { "R", Viseme.C_D_G_K_N_S_X_Z }, 
-            { "T", Viseme.F_T_Th_V }, 
-            { "UW", Viseme.U }, 
-            { "W", Viseme.C_D_G_K_N_S_X_Z }, 
-            { "N", Viseme.C_D_G_K_N_S_X_Z }, 
-            { "IH", Viseme.I }, 
-            { "P", Viseme.B_M_P }, 
-            { "L", Viseme.C_D_G_K_N_S_X_Z }, 
-            { "AY", Viseme.A }, 
-            { "AA", Viseme.A }, 
-            { "B", Viseme.B_M_P }, 
-            { "ER", Viseme.E }, 
-            { "G", Viseme.C_D_G_K_N_S_X_Z }, 
-            { "K", Viseme.C_D_G_K_N_S_X_Z }, 
-            { "S", Viseme.C_D_G_K_N_S_X_Z }, 
-            { "TH", Viseme.F_T_Th_V }, 
-            { "V", Viseme.F_T_Th_V }, 
-            { "HH", Viseme.J_Ch_Sh }, 
-            { "AE", Viseme.A }, 
-            { "OW",Viseme.O }, 
-            { "NG", Viseme.C_D_G_K_N_S_X_Z }, 
-            { "SH", Viseme.J_Ch_Sh }, 
-            { "ZH", Viseme.J_Ch_Sh }, 
-            { "Y", Viseme.E }, 
-            { "AW", Viseme.A }, 
-            { "JH", Viseme.J_Ch_Sh }, 
-            { "CH", Viseme.J_Ch_Sh }, 
-            { "UH", Viseme.U }, 
-            { "DH", Viseme.C_D_G_K_N_S_X_Z }, 
-            { "OY", Viseme.O }
-        };
-        
+    public partial class TextToVisemes
+    {   
         /// <summary>
         /// Path to the simplified phoneme dictionary.
         /// </summary>
-        public readonly string DICTIONARY_SIMPLIFIED_PATH = "cmudict/cmudict-short.7b";
+        public readonly string DICTIONARY_SIMPLIFIED_PATH = "cmudict/cmudict-short.txt";
         
         /// <summary>
         /// Vicemes loaded in memory.
         /// </summary>
         private readonly PhoneticDictionary _dictionary = new();
-        
+
         /// <summary>
         /// Create phonemes for the given text.
         /// </summary>
@@ -112,16 +67,16 @@ namespace Dedalord.LiveAr
         /// <summary>
         /// Load phonetic dictionary from disk.
         /// </summary>
-        public async Task Load()
+        public void Load(string dic)
         {
-            var filePath = Path.Combine(Application.streamingAssetsPath, DICTIONARY_SIMPLIFIED_PATH);
-
             var startTime = Time.realtimeSinceStartup;
-            var lines = await File.ReadAllLinesAsync(filePath);
-
             var count = 0;
-            foreach (var line in lines)
+            foreach (var line in dic.Split('\n'))
             {
+                if (!line.Contains(' '))
+                {
+                    continue;
+                }
                 var contents = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 var values = new List<string>(new ArraySegment<string>(contents, 1, contents.Length - 1));
 
@@ -131,7 +86,7 @@ namespace Dedalord.LiveAr
             
             Debug.LogError($"Lines read:{count} Time to parse:{Time.realtimeSinceStartup - startTime}");
         }
-        
+
         /// <summary>
         /// Create phonemes for the given word.
         /// </summary>

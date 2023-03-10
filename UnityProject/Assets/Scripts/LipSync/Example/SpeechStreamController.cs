@@ -55,13 +55,16 @@ namespace Dedalord.LiveAr
         /// </summary>
         private SpeechStream _currentSpeech;
         
+        
+        public TextAsset Dictionary;
+        
         /// <summary>
         /// Unity Awake.
         /// </summary>
         private async void Awake()
         {
             _vicemes = new TextToVisemes();
-            await _vicemes.Load();
+            _vicemes.Load(Dictionary.text);
             _isReady = true;
             OnReady?.Invoke();
             OnReady = null;
