@@ -2185,6 +2185,8 @@ GameObject:
   - component: {fileID: 7431467568764956161}
   - component: {fileID: 5171832686446417684}
   - component: {fileID: 3003432222012802211}
+  - component: {fileID: 7990272477146807412}
+  - component: {fileID: 7594332235224006992}
   m_Layer: 0
   m_Name: GeraldoFaceV4
   m_TagString: Untagged
@@ -2348,7 +2350,7 @@ Animator:
   m_GameObject: {fileID: 5257373178969960871}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f3681e86616954cab87a029c4339f07d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2370,7 +2372,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd9e6647bfff7542acb0200ab74bdd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CubismFadeMotionList: {fileID: 0}
+  CubismFadeMotionList: {fileID: 11400000, guid: 980d362d5050f4bb1b3d474a31ff828b,
+    type: 2}
+--- !u!114 &7990272477146807412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5257373178969960871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d818cf6978677477f8eb71db13c2af6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7594332235224006992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5257373178969960871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c32309711d5cd40a080eddecee92301f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimatorController: {fileID: 5171832686446417684}
+  AnimDuration: 0.2
+  changeRate: 1
 --- !u!1 &5311195778064826015
 GameObject:
   m_ObjectHideFlags: 0

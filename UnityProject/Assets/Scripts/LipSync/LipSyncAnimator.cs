@@ -1,4 +1,6 @@
 using System;
+using Live2D.Cubism.Core;
+using Live2D.Cubism.Framework;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -83,27 +85,6 @@ namespace Dedalord.LiveAr
                 AnimatorController.SetBool(id, (int)_viseme == value);
             }
         }
-
-        /// <summary>
-        /// Unity LateUpdate.
-        /// </summary>
-        private void LateUpdate()
-        {
-            _animTimer -= Time.deltaTime;
-            if (_animTimer > 0)
-            {
-                return;
-            }
-            _animTimer = AnimDuration;
-            
-            if (!_isTalking)
-            {
-                SetViseme(Viseme.Silence);
-                return;
-            }
-
-        }
-
         /// <summary>
         /// Set the animation controller parameters to display the given animation state.
         /// </summary>
