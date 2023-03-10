@@ -1,0 +1,25 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "Gerardo Test.moc3",
+		"Textures": [
+			"Gerardo Test.4096/texture_00.png"
+		],
+		"Physics": "Gerardo Test.physics3.json",
+		"DisplayInfo": "Gerardo Test.cdi3.json"
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": [
+				"ParamEyeROpen"
+			]
+		},
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		}
+	]
+}

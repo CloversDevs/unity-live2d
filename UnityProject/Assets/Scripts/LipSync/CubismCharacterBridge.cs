@@ -40,14 +40,28 @@ namespace Dedalord.LiveAr
         public const string HAIR_SIDE = "ParamHairSide";
         public const string HAIR_BACK = "ParamHairBack";
     }
-
+    
+    
     public class CubismCharacterBridge : MonoBehaviour
     {
         private CubismModel model;
         private CubismParameterStore parameterStore;
         private readonly Dictionary<string, CubismParameter> _parameters = new();
         private readonly Dictionary<CubismParameter, float> _pendingModifications = new();
-        
+        private readonly Dictionary<CubismParameter, (float, float)> _pendingBlendings = new();
+
+        public string[] GetAllParameters()
+        {
+            var result = new string[_parameters.Count];
+            var i = 0;
+            foreach (var p in _parameters)
+            {
+                result[i] = p.Key;
+                i++;
+            }
+
+            return result;
+        }
         public void Set(string id, float value)
         {
             var p = _parameters[id];
@@ -58,6 +72,12 @@ namespace Dedalord.LiveAr
         {
             var p = _parameters[id];
             _pendingModifications[p] = Mathf.Lerp(p.MinimumValue, p.MaximumValue, value);
+        }
+        
+        public void BlendNormalized(string id, float value, float rate)
+        {
+            var p = _parameters[id];
+            _pendingBlendings[p] = (Mathf.Lerp(p.MinimumValue, p.MaximumValue, value), rate);
         }
 
         private string GenerateMap(string name)
@@ -92,7 +112,7 @@ namespace Dedalord.LiveAr
                 Debug.LogError(GenerateMap("TestMap"));
             }
 
-            if (_pendingModifications.Count == 0)
+            if (_pendingModifications.Count == 0 && _pendingBlendings.Count == 0)
             {
                 return;
             }
@@ -102,6 +122,12 @@ namespace Dedalord.LiveAr
                 modification.Key.Value = modification.Value;
             }
             _pendingModifications.Clear();
+            
+            foreach (var blend in _pendingBlendings)
+            {
+                blend.Key.Value = Mathf.Lerp(blend.Key.Value, blend.Value.Item1, blend.Value.Item2) ;
+            }
+            _pendingBlendings.Clear();
             
             // Save the current values of the model's parameters and parts
             parameterStore.SaveParameters();

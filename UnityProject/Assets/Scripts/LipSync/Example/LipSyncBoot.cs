@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Dedalord.LiveAr
@@ -40,6 +41,8 @@ namespace Dedalord.LiveAr
         /// Controller for turning text into speech stream events.
         /// </summary>
         public SpeechStreamController SpeechController;
+
+        public GeraldoDebugController GeraldoController;
         
         /// <summary>
         /// Unity Start.
@@ -53,7 +56,9 @@ namespace Dedalord.LiveAr
             SpeechController.OnReachViseme += v => Display.SetMouthViseme(v);
             SpeechController.OnStopTalking += () => Display.SetMouthViseme(Viseme.Silence);
             SpeechController.OnAddText += s => TextDisplay.text = s;
-            
+
+            SpeechController.OnStartTalking += GeraldoController.StartTalking;
+            SpeechController.OnStopTalking += GeraldoController.StopTalking;
             SpeechController.WhenReady(()=>
             {
                 Display.SetEmotion(TestEmotion);
@@ -61,6 +66,15 @@ namespace Dedalord.LiveAr
             });
         }
 
+        public void Update()
+        {
+            if (!Input.GetKeyDown(KeyCode.D))
+            {
+                return;
+            }
+
+            PlayTestInput();
+        }
         /// <summary>
         /// Play speech from the test input panel.
         /// </summary>
