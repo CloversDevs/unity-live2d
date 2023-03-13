@@ -13,5 +13,7 @@ namespace Dedalord.LiveAr
         GO_FACE_MESH = 4,
         GO_EYE_POSE = 5,
         GO_LIP_SYNC = 6,
+        GO_CHARACTER = 7,
+        GO_PERFORMANCE = 8,
     }
 }

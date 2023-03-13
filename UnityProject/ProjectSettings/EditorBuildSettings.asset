@@ -15,6 +15,12 @@ EditorBuildSettings:
     path: Assets/Scenes/lipsync.unity
     guid: 2860f5bf898104ca5a0e676b5d442349
   - enabled: 1
+    path: Assets/Scenes/character.unity
+    guid: e9d2c03b9670c4b6da861cac80bacbbd
+  - enabled: 1
+    path: Assets/Scenes/performance.unity
+    guid: d436a168f818f4513acfb153512b6cc9
+  - enabled: 1
     path: Assets/Scenes/AR Foundation/ARFoundationMenu/Menu.unity
     guid: 904110ab8cef14f7d96c56ca20774e5a
   - enabled: 1
