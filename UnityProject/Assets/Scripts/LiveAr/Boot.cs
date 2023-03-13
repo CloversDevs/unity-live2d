@@ -41,9 +41,19 @@ namespace Dedalord.LiveAr
         public string EyePoseScene;
         
         /// <summary>
-        /// Scene to go to when testing Unity AR Foundation functionality.
+        /// Scene to go to when testing Live2D lipsync animations.
         /// </summary>
         public string LipSyncScene;
+        
+        /// <summary>
+        /// Scene to go to when testing an entire character on Live2D.
+        /// </summary>
+        public string CharacterScene;
+        
+        /// <summary>
+        /// Scene to go to when testing Live2D performance.
+        /// </summary>
+        public string PerformanceScene;
 
         /// <summary>
         /// Unity Awake.
@@ -61,6 +71,8 @@ namespace Dedalord.LiveAr
             SimpleMessageRouter.AddListener(SimpleMessageId.GO_EYE_POSE, ()=> LoadARScene(EyePoseScene));
             
             SimpleMessageRouter.AddListener(SimpleMessageId.GO_LIP_SYNC, OnLipSync);
+            SimpleMessageRouter.AddListener(SimpleMessageId.GO_CHARACTER, OnCharacter);
+            SimpleMessageRouter.AddListener(SimpleMessageId.GO_PERFORMANCE, OnPerformance);
         }
         
         /// <summary>
@@ -102,6 +114,22 @@ namespace Dedalord.LiveAr
         private void OnLipSync()
         {
             SceneManager.LoadScene(LipSyncScene);
+        }
+        
+        /// <summary>
+        /// Invoke to discard everything and go to the character test scene
+        /// </summary>
+        private void OnCharacter()
+        {
+            SceneManager.LoadScene(CharacterScene);
+        }
+        
+        /// <summary>
+        /// Invoke to discard everything and go to the performance test scene
+        /// </summary>
+        private void OnPerformance()
+        {
+            SceneManager.LoadScene(PerformanceScene);
         }
     }
 }

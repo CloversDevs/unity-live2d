@@ -61,10 +61,10 @@ namespace Dedalord.LiveAr
         public int ExpressionSelectionIndex;
         private Expression CurrentExpresion => Expressions[ExpressionSelectionIndex];
         
-        public Vector2 HeadDirection;
+        private Vector2 HeadDirection = Vector2.one * .5f;
+        private Vector2 EyesDirection = Vector2.one * .5f;
         public Vector2 HeadRangeMin;
         public Vector2 HeadRangeMax;
-        public Vector2 EyesDirection;
         [Range(0f, 1f)]
         public float EyeBrowsAnimationLerpRate = 0.1f;
         [Range(0f, 1f)]
@@ -124,32 +124,34 @@ namespace Dedalord.LiveAr
         }
 
         public float TalkAnimDuration = 0.2f;
+        public float MouthTalkingClose = 0f;
+        public float MouthTalkingOpen = 0.8f;
         private float _talkAnimTimer;
         private int _mouthAnimFrame;
-        private float[] _mouthTalkingPositions = new float[]{0.1f, 0.6f};
+        private float[] _mouthTalkingPositions = new float[]{0.1f, 0.8f};
         private void MouthAnimation()
         {
             _bridge.BlendNormalized(GeraldoDebugMap.MOUTH_OPEN_UPY, MouthShape, MouthAnimationLerpRate);
             
-            Debug.LogError("Is talking!");
             _talkAnimTimer -= Time.deltaTime;
-            if (_talkAnimTimer > 0)
-            {
-                return;
-            }
             
             if (!_isTalking)
             {
                 _bridge.BlendNormalized(GeraldoDebugMap.MOUTH_OPEN_DOWNY, 0f, MouthAnimationLerpRate);
                 return;
             }
-            
+            else
+            {
+                _bridge.BlendNormalized(GeraldoDebugMap.MOUTH_OPEN_DOWNY, _mouthAnimFrame == 0 ? MouthTalkingClose : MouthTalkingOpen, MouthAnimationLerpRate);
+            }
+            if (_talkAnimTimer > 0)
+            {
+                return;
+            }
             _talkAnimTimer = TalkAnimDuration;
+            
             _mouthAnimFrame++;
             _mouthAnimFrame %= _mouthTalkingPositions.Length;
-            
-            _bridge.BlendNormalized(GeraldoDebugMap.MOUTH_OPEN_DOWNY, _mouthTalkingPositions[_mouthAnimFrame], MouthAnimationLerpRate);
-            
         }
 
         public enum MouseMode
