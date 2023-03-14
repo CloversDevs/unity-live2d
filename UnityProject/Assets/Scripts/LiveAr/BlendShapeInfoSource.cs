@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
+#if UNITY_IOS && !UNITY_EDITOR
 using UnityEngine.XR.ARKit;
+#endif
 
 namespace Dedalord.LiveAr
 {
@@ -17,10 +16,10 @@ namespace Dedalord.LiveAr
         private static BlendShapeInfoSource _instance;
         public float CoefficientScale = 100.0f;
 
-        public event Action<Dictionary<ARKitBlendShapeLocation, float>> OnChange;
-        private readonly Dictionary<ARKitBlendShapeLocation, float> _values = new();
         
 #if UNITY_IOS && !UNITY_EDITOR
+        public event Action<Dictionary<ARKitBlendShapeLocation, float>> OnChange;
+        private readonly Dictionary<ARKitBlendShapeLocation, float> _values = new();
         ARKitFaceSubsystem m_ARKitFaceSubsystem;
 
         Dictionary<ARKitBlendShapeLocation, int> m_FaceArkitBlendShapeIndexMap;

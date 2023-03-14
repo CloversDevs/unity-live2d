@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Live2D.Cubism.Framework;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Dedalord.LiveAr
 {
@@ -53,7 +55,7 @@ namespace Dedalord.LiveAr
         public float Form = 0.5f;
     }
 
-    [RequireComponent(typeof(CubismCharacterBridge)),
+    [RequireComponent(typeof(Live2DCharacterBridge)),
      RequireComponent(typeof(CubismEyeBlinkController))]
     public class GeraldoDebugController : MonoBehaviour
     {
@@ -88,12 +90,12 @@ namespace Dedalord.LiveAr
         private float _countdownToNextBlink = 2f;
         private float _blinkingTimer = 0f;
         
-        private CubismCharacterBridge _bridge;
+        private Live2DCharacterBridge _bridge;
         private CubismEyeBlinkController _blinkController;
         
         private void Awake()
         {
-            _bridge = GetComponent<CubismCharacterBridge>();
+            _bridge = GetComponent<Live2DCharacterBridge>();
             _blinkController = GetComponent<CubismEyeBlinkController>();
         }
 
@@ -104,7 +106,7 @@ namespace Dedalord.LiveAr
                 ExpressionSelectionIndex++;
                 ExpressionSelectionIndex %= Expressions.Length;
             }
-            
+
             LookAtAnimation();
             EyebrowAnimation();
             BlinkAnimation();
@@ -215,6 +217,7 @@ namespace Dedalord.LiveAr
         }
         private void BlinkAnimation()
         {
+            // If in blinking animation lerp to close eyes.
             if (_isBlinking)
             {
                 _blinkingTimer += Time.deltaTime;
@@ -223,6 +226,7 @@ namespace Dedalord.LiveAr
                 return;
             }
             
+            // Check if it is time to blink.
             _countdownToNextBlink -= Time.deltaTime;
             _isBlinking = _countdownToNextBlink <= 0;
             if (_isBlinking)
@@ -232,7 +236,11 @@ namespace Dedalord.LiveAr
                 Debug.LogError("Blink!");
                 return;
             }
+            
+            // Lerp to open eyes.
+            Debug.LogError($"Eyes: {_blinkController.EyeOpening} {OpenEyesValue} at {BlinkAnimationLerpRate}!");
             _blinkController.EyeOpening = Mathf.Lerp(_blinkController.EyeOpening, OpenEyesValue, BlinkAnimationLerpRate);
+            Debug.LogError($"R - Eyes: {_blinkController.EyeOpening} {OpenEyesValue} at {BlinkAnimationLerpRate}!");
         }
     }
 }

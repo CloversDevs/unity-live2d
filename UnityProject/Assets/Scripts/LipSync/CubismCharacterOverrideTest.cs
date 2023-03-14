@@ -5,12 +5,12 @@ namespace Dedalord.LiveAr
     /// <summary>
     /// Test using the Character Bridge to override parameters.
     /// </summary>
-    [RequireComponent(typeof(CubismCharacterBridge))]
+    [RequireComponent(typeof(Live2DCharacterBridge))]
     public class CubismCharacterOverrideTest : MonoBehaviour
     {
         private float v;
         public float changeRate;
-        private CubismCharacterBridge _character;
+        private Live2DCharacterBridge _live2DCharacter;
         /// <summary>
         /// Unity LateUpdate.
         /// </summary>
@@ -20,9 +20,9 @@ namespace Dedalord.LiveAr
             v = Mathf.Clamp(v, -1, 1);
             
             // Get a reference to the CubismModel you want to modify
-            _character ??= GetComponent<CubismCharacterBridge>();
-            _character.SetNormalized(Map.MOUTH_OPEN_DOWNY, v);
-            _character.SetNormalized(Map.JAW_OPEN, v);
+            _live2DCharacter ??= GetComponent<Live2DCharacterBridge>();
+            _live2DCharacter.SetNormalized(Map.MOUTH_OPEN_DOWNY, v);
+            _live2DCharacter.SetNormalized(Map.JAW_OPEN, v);
         }
     }
 }

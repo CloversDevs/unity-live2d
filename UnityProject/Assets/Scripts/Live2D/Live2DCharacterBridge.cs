@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework;
 using UnityEngine;
-using UnityEngine.XR.ARKit;
 
 namespace Dedalord.LiveAr
 {
@@ -41,15 +39,38 @@ namespace Dedalord.LiveAr
         public const string HAIR_BACK = "ParamHairBack";
     }
     
-    
-    public class CubismCharacterBridge : MonoBehaviour
+    public class Live2DCharacterBridge : MonoBehaviour
     {
-        private CubismModel model;
-        private CubismParameterStore parameterStore;
+        /// <summary>
+        /// Reference to cubism model on same GameObject to modify.
+        /// </summary>
+        [SerializeField, HideInInspector]
+        private CubismModel _model;
+        
+        /// <summary>
+        /// Reference to cubism parameter store on same GameObject to use to apply changes.
+        /// </summary>
+        private CubismParameterStore _parameterStore;
+        
+        /// <summary>
+        /// All cubism parameters mapped to their identifier.
+        /// </summary>
         private readonly Dictionary<string, CubismParameter> _parameters = new();
+        
+        /// <summary>
+        /// All changes to parameters that will be applied at the end of LateUpdate.
+        /// </summary>
         private readonly Dictionary<CubismParameter, float> _pendingModifications = new();
+        
+        /// <summary>
+        /// All changes to parameter blending that will be applied at the end of LateUpdate.
+        /// </summary>
         private readonly Dictionary<CubismParameter, (float, float)> _pendingBlendings = new();
 
+        /// <summary>
+        /// Get an array with all the parameter ids. 
+        /// </summary>
+        /// <returns></returns>
         public string[] GetAllParameters()
         {
             var result = new string[_parameters.Count];
@@ -62,12 +83,21 @@ namespace Dedalord.LiveAr
 
             return result;
         }
+        
+        /// <summary>
+        /// Set the parameter value at the end of the next LateUpdate.
+        /// Using SetNormalized instead is recommended.
+        /// </summary>
         public void Set(string id, float value)
         {
             var p = _parameters[id];
             _pendingModifications[p] = value;
         }
     
+        /// <summary>
+        /// Set the parameter value at the end of the next LateUpdate.
+        /// Values will go from min to max with -1 to 1 regardless of actual range.
+        /// </summary>
         public void SetNormalized(string id, float value)
         {
             var p = _parameters[id];
@@ -79,39 +109,59 @@ namespace Dedalord.LiveAr
             var p = _parameters[id];
             _pendingBlendings[p] = (Mathf.Lerp(p.MinimumValue, p.MaximumValue, value), rate);
         }
+        
+        public void BlendNormalized2(string id, float value, float rate)
+        {
+            var p = _parameters[id];
+            _pendingBlendings[p] = (Mathf.Lerp(p.MinimumValue, p.MaximumValue, value * 0.5f + 0.5f), rate);
+        }
+
+        private void OnValidate()
+        {
+            _model ??= GetComponentInChildren<CubismModel>();
+
+            if (_model == null)
+            {
+                Debug.LogError("Live2DCharacterBridge MUST have a CubismModel on the same MonoBehaviour or in its children to control!");
+            }
+        }
 
         private string GenerateMap(string name)
         {
             var str = $"public static class {name}\n    {{\n";
                 
-            for (var i = 0; i < model.Parameters.Length; ++i)
+            for (var i = 0; i < _model.Parameters.Length; ++i)
             {
-                var output = Regex.Replace(model.Parameters[i].Id, @"^Param([A-Z][a-z]+)|([A-Z][a-z]+)([A-Z][a-z]+)", "$1$2_$3").ToUpper();
-                str += $"    public const string {output} = \"{model.Parameters[i].Id}\";\n";
+                var output = Regex.Replace(_model.Parameters[i].Id, @"^Param([A-Z][a-z]+)|([A-Z][a-z]+)([A-Z][a-z]+)", "$1$2_$3").ToUpper();
+                str += $"    public const string {output} = \"{_model.Parameters[i].Id}\";\n";
             }
             return $"{str}\n}}\n";
+        }
+
+        /// <summary>
+        /// Unity Awake.
+        /// </summary>
+        private void Awake()
+        {
+            // Get a reference to the CubismParameterStore component on the model
+            _parameterStore ??= _model.GetComponent<CubismParameterStore>();
+
+            if (_parameters.Count == 0)
+            {
+                for (var i = 0; i < _model.Parameters.Length; ++i)
+                {
+                    _parameters[_model.Parameters[i].Id] = _model.Parameters[i];
+                }
+                Debug.LogError(GenerateMap("TestMap"));
+            }
         }
         
         /// <summary>
         /// Unity LateUpdate.
+        /// Apply changes and blends.
         /// </summary>
         private void LateUpdate()
         {
-            // Get a reference to the CubismModel you want to modify
-            model ??= GetComponent<CubismModel>();
-
-            // Get a reference to the CubismParameterStore component on the model
-            parameterStore ??= model.GetComponent<CubismParameterStore>();
-
-            if (_parameters.Count == 0)
-            {
-                for (var i = 0; i < model.Parameters.Length; ++i)
-                {
-                    _parameters[model.Parameters[i].Id] = model.Parameters[i];
-                }
-                Debug.LogError(GenerateMap("TestMap"));
-            }
-
             if (_pendingModifications.Count == 0 && _pendingBlendings.Count == 0)
             {
                 return;
@@ -130,7 +180,7 @@ namespace Dedalord.LiveAr
             _pendingBlendings.Clear();
             
             // Save the current values of the model's parameters and parts
-            parameterStore.SaveParameters();
+            _parameterStore.SaveParameters();
         }
     }
 }

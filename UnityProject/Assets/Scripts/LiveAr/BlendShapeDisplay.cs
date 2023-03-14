@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+#if UNITY_IOS && !UNITY_EDITOR
 using UnityEngine.XR.ARKit;
+#endif
 
 namespace Dedalord.LiveAr
 {
@@ -11,7 +13,8 @@ namespace Dedalord.LiveAr
     public class BlendShapeDisplay : MonoBehaviour
     {
         public TMP_Text Display;
-        public CubismCharacterBridge CharacterBridge;
+        public Live2DCharacterBridge Live2DCharacterBridge;
+#if UNITY_IOS && !UNITY_EDITOR
         private void Start()
         {
             BlendShapeInfoSource.Instance.OnChange += BlendShapes_OnChange;
@@ -47,7 +50,7 @@ namespace Dedalord.LiveAr
                 return;
             }
             Display.text = $"{blendShapes[ARKitBlendShapeLocation.JawOpen]:000}\n{blendShapes[ARKitBlendShapeLocation.MouthClose]:000}\n{blendShapes[ARKitBlendShapeLocation.MouthPucker]:000}\n{blendShapes[ARKitBlendShapeLocation.MouthLowerDownLeft]:000}";
-
         }
+#endif
     }
 }

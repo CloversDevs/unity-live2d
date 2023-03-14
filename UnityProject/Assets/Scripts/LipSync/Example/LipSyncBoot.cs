@@ -53,15 +53,15 @@ namespace Dedalord.LiveAr
             SpeechController.OnStopTalking += () => Debug.LogError($"END");
             //SpeechController.OnAddText += s => Debug.LogError($"TEXT: {s}");
             
-            SpeechController.OnReachViseme += v => Display.SetMouthViseme(v);
-            SpeechController.OnStopTalking += () => Display.SetMouthViseme(Viseme.Silence);
+            SpeechController.OnReachViseme += v => Display?.SetMouthViseme(v);
+            SpeechController.OnStopTalking += () => Display?.SetMouthViseme(Viseme.Silence);
             SpeechController.OnAddText += s => TextDisplay.text = s;
 
             SpeechController.OnStartTalking += GeraldoController.StartTalking;
             SpeechController.OnStopTalking += GeraldoController.StopTalking;
             SpeechController.WhenReady(()=>
             {
-                Display.SetEmotion(TestEmotion);
+                Display?.SetEmotion(TestEmotion);
                 SpeechController.Play(TestString);
             });
         }
