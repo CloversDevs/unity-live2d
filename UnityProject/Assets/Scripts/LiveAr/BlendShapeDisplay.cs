@@ -31,7 +31,7 @@ namespace Dedalord.LiveAr
                     100
                 )
             );
-            CharacterBridge.SetNormalized(Map.JAW_OPEN, jawOpen);
+            Live2DCharacterBridge.Set(Map.JAW_OPEN, jawOpen);
 
             var mouthOpen = 1 - Mathf.InverseLerp(
                 10,
@@ -42,8 +42,8 @@ namespace Dedalord.LiveAr
                     100
                     )   
                 );
-            CharacterBridge.SetNormalized(Map.MOUTH_OPEN_DOWNY, jawOpen);
-            CharacterBridge.SetNormalized(Map.MOUTH_OPEN_UPY, jawOpen);
+            Live2DCharacterBridge.Set(Map.MOUTH_OPEN_DOWNY, jawOpen);
+            Live2DCharacterBridge.Set(Map.MOUTH_OPEN_UPY, jawOpen);
             
             if (Display == null)
             {

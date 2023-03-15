@@ -1,6 +1,9 @@
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 #if UNITY_IOS && !UNITY_EDITOR
+using System;
+using System.Collections.Generic;
 using UnityEngine.XR.ARKit;
 #endif
 
