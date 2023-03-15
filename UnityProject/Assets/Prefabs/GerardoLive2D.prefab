@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1009495837211658147}
   - component: {fileID: 1009495837211658171}
   - component: {fileID: 1009495837211658172}
+  - component: {fileID: 4565187600939363392}
   - component: {fileID: 8238190557054607393}
   - component: {fileID: 1009495837211658175}
   - component: {fileID: 1009495837211658174}
@@ -73,6 +74,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ec93574a6ca8b41ccb88fd0f4c13ba7b, type: 2}
   - {fileID: 11400000, guid: 26510af9cd4904409bbb574974679311, type: 2}
   - {fileID: 11400000, guid: 4b266a5c6b1df43029425c428c6615fb, type: 2}
+--- !u!114 &4565187600939363392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009495837211658146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 634c28973925c4e58bbea2efe109d282, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bridge: {fileID: 1009495837211658171}
+  _controller: {fileID: 1009495837211658172}
 --- !u!114 &8238190557054607393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,6 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bd5a083cea7946bca34c6bbf22d7098, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bridge: {fileID: 1009495837211658171}
+  _controller: {fileID: 1009495837211658172}
 --- !u!114 &1009495837211658175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,6 +115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bridge: {fileID: 1009495837211658171}
+  _controller: {fileID: 1009495837211658172}
   HeadDirection: {x: 0, y: 0}
   HeadMinRange: {x: -1, y: -1}
   HeadMaxRange: {x: 1, y: 1}
@@ -118,6 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bridge: {fileID: 1009495837211658171}
+  _controller: {fileID: 1009495837211658172}
   EyesDirection: {x: 0, y: 0}
   LerpRate: 0.2
   LookAt: 1
@@ -136,16 +155,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bridge: {fileID: 1009495837211658171}
-  EyeBrows:
-    PositionX: 0.5
-    PositionY: 0.5
-    Angle: 0.5
-    Form: 0.5
-  LerpRate: 0.2
+  _controller: {fileID: 1009495837211658172}
   BlinkDuration: 0.2
   TimeBetweenBlinksMin: 2
   TimeBetweenBlinksMax: 10
-  BlinkAnimationLerpRate: 0.1
+  LerpRate: 0.2
   OpenEyesValue: 0.8
 --- !u!114 &1009495837211658144
 MonoBehaviour:
@@ -160,6 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bridge: {fileID: 1009495837211658171}
+  _controller: {fileID: 1009495837211658172}
   EyeBrows:
     PositionX: 0.5
     PositionY: 0.5
@@ -179,6 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bridge: {fileID: 1009495837211658171}
+  _controller: {fileID: 1009495837211658172}
   IsTalking: 0
   TalkAnimDuration: 0.2
   MouthTalkingClose: 0
@@ -197,6 +213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bridge: {fileID: 1009495837211658171}
+  _controller: {fileID: 1009495837211658172}
   MouthShape: 0
   LerpRate: 0.2
 --- !u!1 &1009495837619519484
