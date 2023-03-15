@@ -27,18 +27,12 @@ namespace Dedalord.LiveAr
         
         private void Awake()
         {
-            var controller = GetComponent<Live2DCharacterController>();
-            if (controller == null)
-            {
-                return;
-            }
-
             void ListenToController(bool isTalking)
             {
                 IsTalking = isTalking;
             }
             
-            controller.OnChangeTalkingState += ListenToController;
+            Controller.OnChangeTalkingState += ListenToController;
         }
 
         private void Update()

@@ -16,13 +16,11 @@ namespace Dedalord.LiveAr
         
         private void Awake()
         {
-            var controller = GetComponent<Live2DCharacterController>();
-            if (controller == null)
+            void ListenToController(Vector2 target)
             {
-                return;
+                LookTarget.position = target;
             }
-
-            controller.OnChangeEyesLookAt += target => LookTarget.position = target;
+            Controller.OnChangeEyesLookAt += ListenToController;
         }
         
         private void Update()

@@ -27,15 +27,14 @@ namespace Dedalord.LiveAr
         
         private void Awake()
         {
-            _blinkController = GetComponentInChildren<CubismEyeBlinkController>();
+            _blinkController = Controller.GetComponentInChildren<CubismEyeBlinkController>();
             
-            var controller = GetComponent<Live2DCharacterController>();
-            if (controller == null)
+            void ListenToController(Expression expression)
             {
-                return;
+                OpenEyesValue = expression.OpenEyesValue;
             }
 
-            controller.OnChangeExpression += expression => OpenEyesValue = expression.OpenEyesValue;
+            Controller.OnChangeExpression += ListenToController;
         }
 
         private void Update()

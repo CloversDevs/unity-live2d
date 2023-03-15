@@ -2,16 +2,9 @@ using UnityEngine;
 
 namespace Dedalord.LiveAr
 {
-    [RequireComponent(typeof(Live2DCharacterController))]
-    public class Live2DCharacterDebugger : MonoBehaviour
+    public class Live2DCharacterDebugger : Live2DControllerElement
     {
-        [SerializeField, HideInInspector]
-        private Live2DCharacterController _targetController;
-        private bool _talking;
-        private void OnValidate()
-        {
-            _targetController = GetComponent<Live2DCharacterController>();
-        }
+        private bool _isTalking;
         
         // Update is called once per frame
         private void Update()
@@ -41,8 +34,8 @@ namespace Dedalord.LiveAr
                 Vector3 mouseScreenPosition = touchPosition;
                 mouseScreenPosition.z = transform.position.z;
                 var mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-                _targetController.LookAtEyes(mouseWorldPosition);
-                _targetController.LookAtHead(mouseWorldPosition);
+                Controller.LookAtEyes(mouseWorldPosition);
+                Controller.LookAtHead(mouseWorldPosition);
             }
             
             if (!touchStart)
@@ -50,15 +43,15 @@ namespace Dedalord.LiveAr
                 return;
             }
 
-            _targetController.CurrentExpressionIndex++;
-            _talking = !_talking;
+            Controller.CurrentExpressionIndex++;
+            _isTalking = !_isTalking;
 
-            if (_talking)
+            if (_isTalking)
             {
-                _targetController.StartTalking();
+                Controller.StartTalking();
                 return;
             }
-            _targetController.StopTalking();
+            Controller.StopTalking();
         }
     }
 }

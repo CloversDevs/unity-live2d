@@ -14,18 +14,12 @@ namespace Dedalord.LiveAr
 
         private void Awake()
         {
-            var controller = GetComponent<Live2DCharacterController>();
-            if (controller == null)
-            {
-                return;
-            }
-
             void ListenToController(Expression expression)
             {
                 MouthShape = expression.MouthShape;
             }
             
-            controller.OnChangeExpression += ListenToController;
+            Controller.OnChangeExpression += ListenToController;
         }
         
         private void Update()

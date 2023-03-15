@@ -9,13 +9,7 @@ namespace Dedalord.LiveAr
 
         private void Awake()
         {
-            var controller = GetComponent<Live2DCharacterController>();
-            if (controller == null)
-            {
-                return;
-            }
-
-            controller.OnChangeExpression += expression => EyeBrows = expression.Eyebrows;
+            Controller.OnChangeExpression += expression => EyeBrows = expression.Eyebrows;
         }
         
         private void Update()
