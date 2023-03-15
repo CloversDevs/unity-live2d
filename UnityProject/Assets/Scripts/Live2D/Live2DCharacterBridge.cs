@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Live2D.Cubism.Core;
@@ -6,6 +7,13 @@ using UnityEngine;
 
 namespace Dedalord.LiveAr
 {
+    
+    public enum RangeMode
+    {
+        RAW,
+        ZERO_TO_ONE,
+        MINUS_ONE_TO_ONE
+    }
     public static class Map
     {
         public const string ANGLE_X = "ParamAngleX";
@@ -41,6 +49,8 @@ namespace Dedalord.LiveAr
     
     public class Live2DCharacterBridge : MonoBehaviour
     {
+        private const float BLEND_MULTIPLIER = 60;
+        
         /// <summary>
         /// Reference to cubism model on same GameObject to modify.
         /// </summary>
@@ -84,36 +94,43 @@ namespace Dedalord.LiveAr
             return result;
         }
         
+        
         /// <summary>
         /// Set the parameter value at the end of the next LateUpdate.
         /// Using SetNormalized instead is recommended.
         /// </summary>
-        public void Set(string id, float value)
+        public void Set(string id, float value, RangeMode range = RangeMode.ZERO_TO_ONE)
         {
             var p = _parameters[id];
-            _pendingModifications[p] = value;
-        }
-    
-        /// <summary>
-        /// Set the parameter value at the end of the next LateUpdate.
-        /// Values will go from min to max with -1 to 1 regardless of actual range.
-        /// </summary>
-        public void SetNormalized(string id, float value)
-        {
-            var p = _parameters[id];
-            _pendingModifications[p] = Mathf.Lerp(p.MinimumValue, p.MaximumValue, value);
-        }
-        
-        public void BlendNormalized(string id, float value, float rate)
-        {
-            var p = _parameters[id];
-            _pendingBlendings[p] = (Mathf.Lerp(p.MinimumValue, p.MaximumValue, value), rate);
+            switch (range)
+            {
+                case RangeMode.RAW:
+                    _pendingModifications[p] = value;
+                    return;
+                case RangeMode.ZERO_TO_ONE:
+                    _pendingModifications[p] = Mathf.Lerp(p.MinimumValue, p.MaximumValue, value);;
+                    return;
+                case RangeMode.MINUS_ONE_TO_ONE:
+                    _pendingModifications[p] = Mathf.Lerp(p.MinimumValue, p.MaximumValue, value * 0.5f + 0.5f);
+                    return;
+            }
         }
         
-        public void BlendNormalized2(string id, float value, float rate)
+        public void Blend(string id, float value, float rate, RangeMode range = RangeMode.ZERO_TO_ONE)
         {
             var p = _parameters[id];
-            _pendingBlendings[p] = (Mathf.Lerp(p.MinimumValue, p.MaximumValue, value * 0.5f + 0.5f), rate);
+            switch (range)
+            {
+                case RangeMode.RAW:
+                    _pendingBlendings[p] = (value, rate);
+                    return;
+                case RangeMode.ZERO_TO_ONE:
+                    _pendingBlendings[p] = (Mathf.Lerp(p.MinimumValue, p.MaximumValue, value), rate);
+                    return;
+                case RangeMode.MINUS_ONE_TO_ONE:
+                    _pendingBlendings[p] = (Mathf.Lerp(p.MinimumValue, p.MaximumValue, value * 0.5f + 0.5f), rate);
+                    return;
+            }
         }
 
         private void OnValidate()
@@ -175,7 +192,11 @@ namespace Dedalord.LiveAr
             
             foreach (var blend in _pendingBlendings)
             {
-                blend.Key.Value = Mathf.Lerp(blend.Key.Value, blend.Value.Item1, blend.Value.Item2) ;
+                if (Time.deltaTime == 0)
+                {
+                    break;
+                }
+                blend.Key.Value = Mathf.Lerp(blend.Key.Value, blend.Value.Item1, blend.Value.Item2 * Time.deltaTime * BLEND_MULTIPLIER);
             }
             _pendingBlendings.Clear();
             

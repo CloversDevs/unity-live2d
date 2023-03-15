@@ -133,19 +133,17 @@ namespace Dedalord.LiveAr
         private float[] _mouthTalkingPositions = new float[]{0.1f, 0.8f};
         private void MouthAnimation()
         {
-            _bridge.BlendNormalized(GeraldoDebugMap.MOUTH_OPEN_UPY, MouthShape, MouthAnimationLerpRate);
+            _bridge.Blend(GeraldoDebugMap.MOUTH_OPEN_UPY, MouthShape, MouthAnimationLerpRate);
             
             _talkAnimTimer -= Time.deltaTime;
             
             if (!_isTalking)
             {
-                _bridge.BlendNormalized(GeraldoDebugMap.MOUTH_OPEN_DOWNY, 0f, MouthAnimationLerpRate);
+                _bridge.Blend(GeraldoDebugMap.MOUTH_OPEN_DOWNY, 0f, MouthAnimationLerpRate);
                 return;
             }
-            else
-            {
-                _bridge.BlendNormalized(GeraldoDebugMap.MOUTH_OPEN_DOWNY, _mouthAnimFrame == 0 ? MouthTalkingClose : MouthTalkingOpen, MouthAnimationLerpRate);
-            }
+            _bridge.Blend(GeraldoDebugMap.MOUTH_OPEN_DOWNY, _mouthAnimFrame == 0 ? MouthTalkingClose : MouthTalkingOpen, MouthAnimationLerpRate);
+
             if (_talkAnimTimer > 0)
             {
                 return;
@@ -202,18 +200,18 @@ namespace Dedalord.LiveAr
             EyesDirection.x = Mathf.Clamp(EyesDirection.x, -1f,1f);
             EyesDirection.y = Mathf.Clamp(EyesDirection.y, -1f,1f);
             
-            _bridge.BlendNormalized(GeraldoDebugMap.EYE_BALLX, EyesDirection.x, EyeBrowsAnimationLerpRate);
-            _bridge.BlendNormalized(GeraldoDebugMap.EYE_BALLY, EyesDirection.y, EyeBrowsAnimationLerpRate);
-            _bridge.BlendNormalized(GeraldoDebugMap.ANGLE_X, HeadDirection.x, EyeBrowsAnimationLerpRate);
-            _bridge.BlendNormalized(GeraldoDebugMap.ANGLE_Y, HeadDirection.y, EyeBrowsAnimationLerpRate);
+            _bridge.Blend(GeraldoDebugMap.EYE_BALLX, EyesDirection.x, EyeBrowsAnimationLerpRate);
+            _bridge.Blend(GeraldoDebugMap.EYE_BALLY, EyesDirection.y, EyeBrowsAnimationLerpRate);
+            _bridge.Blend(GeraldoDebugMap.ANGLE_X, HeadDirection.x, EyeBrowsAnimationLerpRate);
+            _bridge.Blend(GeraldoDebugMap.ANGLE_Y, HeadDirection.y, EyeBrowsAnimationLerpRate);
         }
         
         private void EyebrowAnimation()
         {
-            _bridge.BlendNormalized(GeraldoDebugMap.BROW_RX, EyeBrows.PositionX, EyeBrowsAnimationLerpRate);
-            _bridge.BlendNormalized(GeraldoDebugMap.BROW_RY, EyeBrows.PositionY, EyeBrowsAnimationLerpRate);
-            _bridge.BlendNormalized(GeraldoDebugMap.BROW_RFORM, EyeBrows.Form, EyeBrowsAnimationLerpRate);
-            _bridge.BlendNormalized(GeraldoDebugMap.BROW_RANGLE, EyeBrows.Angle, EyeBrowsAnimationLerpRate);
+            _bridge.Blend(GeraldoDebugMap.BROW_RX, EyeBrows.PositionX, EyeBrowsAnimationLerpRate);
+            _bridge.Blend(GeraldoDebugMap.BROW_RY, EyeBrows.PositionY, EyeBrowsAnimationLerpRate);
+            _bridge.Blend(GeraldoDebugMap.BROW_RFORM, EyeBrows.Form, EyeBrowsAnimationLerpRate);
+            _bridge.Blend(GeraldoDebugMap.BROW_RANGLE, EyeBrows.Angle, EyeBrowsAnimationLerpRate);
         }
         private void BlinkAnimation()
         {

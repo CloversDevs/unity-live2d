@@ -21,8 +21,8 @@ namespace Dedalord.LiveAr
             
             // Get a reference to the CubismModel you want to modify
             _live2DCharacter ??= GetComponent<Live2DCharacterBridge>();
-            _live2DCharacter.SetNormalized(Map.MOUTH_OPEN_DOWNY, v);
-            _live2DCharacter.SetNormalized(Map.JAW_OPEN, v);
+            _live2DCharacter.Set(Map.MOUTH_OPEN_DOWNY, v);
+            _live2DCharacter.Set(Map.JAW_OPEN, v);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Dedalord.LiveAr
         
         private void MouthShapeAnimation()
         {
-            Bridge.BlendNormalized(GeraldoDebugMap.MOUTH_OPEN_UPY, MouthShape, LerpRate);
+            Bridge.Blend(GeraldoDebugMap.MOUTH_OPEN_UPY, MouthShape, LerpRate);
         }
     }
 }

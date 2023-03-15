@@ -48,8 +48,8 @@ namespace Dedalord.LiveAr
             HeadDirection.x = Mathf.Clamp(HeadDirection.x, HeadMinRange.x, HeadMaxRange.x);
             HeadDirection.y = Mathf.Clamp(HeadDirection.y, HeadMinRange.y, HeadMaxRange.y);
             
-            Bridge.BlendNormalized2(GeraldoDebugMap.ANGLE_X, HeadDirection.x, LerpRate);
-            Bridge.BlendNormalized2(GeraldoDebugMap.ANGLE_Y, HeadDirection.y, LerpRate);
+            Bridge.Blend(GeraldoDebugMap.ANGLE_X, HeadDirection.x, LerpRate, RangeMode.MINUS_ONE_TO_ONE);
+            Bridge.Blend(GeraldoDebugMap.ANGLE_Y, HeadDirection.y, LerpRate, RangeMode.MINUS_ONE_TO_ONE);
         }
     }
 }

@@ -19,10 +19,10 @@ namespace Dedalord.LiveAr
         
         private void EyebrowAnimation()
         {
-            Bridge.BlendNormalized(GeraldoDebugMap.BROW_RX, EyeBrows.PositionX, LerpRate);
-            Bridge.BlendNormalized(GeraldoDebugMap.BROW_RY, EyeBrows.PositionY, LerpRate);
-            Bridge.BlendNormalized(GeraldoDebugMap.BROW_RFORM, EyeBrows.Form, LerpRate);
-            Bridge.BlendNormalized(GeraldoDebugMap.BROW_RANGLE, EyeBrows.Angle, LerpRate);
+            Bridge.Blend(GeraldoDebugMap.BROW_RX, EyeBrows.PositionX, LerpRate);
+            Bridge.Blend(GeraldoDebugMap.BROW_RY, EyeBrows.PositionY, LerpRate);
+            Bridge.Blend(GeraldoDebugMap.BROW_RFORM, EyeBrows.Form, LerpRate);
+            Bridge.Blend(GeraldoDebugMap.BROW_RANGLE, EyeBrows.Angle, LerpRate);
         }
     }
 }

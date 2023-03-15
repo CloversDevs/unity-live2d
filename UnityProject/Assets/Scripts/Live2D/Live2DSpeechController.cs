@@ -46,10 +46,10 @@ namespace Dedalord.LiveAr
             
             if (!IsTalking)
             {
-                Bridge.BlendNormalized(GeraldoDebugMap.MOUTH_OPEN_DOWNY, 0f, LerpRate);
+                Bridge.Blend(GeraldoDebugMap.MOUTH_OPEN_DOWNY, 0f, LerpRate);
                 return;
             }
-            Bridge.BlendNormalized(GeraldoDebugMap.MOUTH_OPEN_DOWNY, _mouthAnimFrame == 0 ? MouthTalkingClose : MouthTalkingOpen, LerpRate);
+            Bridge.Blend(GeraldoDebugMap.MOUTH_OPEN_DOWNY, _mouthAnimFrame == 0 ? MouthTalkingClose : MouthTalkingOpen, LerpRate);
             
             if (_talkAnimTimer > 0)
             {

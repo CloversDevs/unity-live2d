@@ -46,8 +46,8 @@ namespace Dedalord.LiveAr
             EyesDirection.x = Mathf.Clamp(EyesDirection.x, -1f,1f);
             EyesDirection.y = Mathf.Clamp(EyesDirection.y, -1f,1f);
             
-            Bridge.BlendNormalized2(GeraldoDebugMap.EYE_BALLX, EyesDirection.x, LerpRate);
-            Bridge.BlendNormalized2(GeraldoDebugMap.EYE_BALLY, EyesDirection.y, LerpRate);
+            Bridge.Blend(GeraldoDebugMap.EYE_BALLX, EyesDirection.x, LerpRate, RangeMode.MINUS_ONE_TO_ONE);
+            Bridge.Blend(GeraldoDebugMap.EYE_BALLY, EyesDirection.y, LerpRate, RangeMode.MINUS_ONE_TO_ONE);
         }
     }
 }
